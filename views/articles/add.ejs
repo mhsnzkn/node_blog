@@ -1,19 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog</title>
 
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-</head>
+<%- include('../partials/head'); %>
+
 <body>
+  <%- include('../partials/navbar'); %>
     <div class="container">
-        <h1 class="mb-4">Blog Sitesi Ekle</h1>
-        <form action="/articles" method="post">
-            <%- include('_form_fields') %>
-        </form>
+
+        <h1 class="mb-4">Blog Ekle</h1>
+
+        <%- include('_form_fields') %>
+
     </div>
+
+<%- include('../partials/footer') %>
+
+    <script>
+        document.getElementById('btn-submit').addEventListener('click', function(){
+          let errorTexts = document.querySelectorAll('.error-message');
+          errorTexts.forEach( button =>{
+            button.style.display = 'none'
+          })
+            const data = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                markdown: document.getElementById('markdown').value,
+            }
+            let formPost = true;
+            // if(!data.title){
+            //   let span = document.getElementById('span-title');
+            //   span.innerText = 'Boş bırakılamaz';
+            //   span.style.display = 'block'
+            //   formPost = false;
+            // }
+            checkRequiredErrorMessage(data.title, "span-title");
+            if(!data.description){
+              let span = document.getElementById('span-description');
+              span.innerText = 'Boş bırakılamaz';
+              span.style.display = 'block'
+              formPost = false;
+            }
+            if(!data.markdown){
+              let span = document.getElementById('span-markdown');
+              span.innerText = 'Boş bırakılamaz';
+              span.style.display = 'block'
+              formPost = false;
+            }
+            if(formPost){
+              post(data);
+            }
+        })
+        const post = (data) =>{
+            fetch('/articles', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          })
+          .then(response => response.json())
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+        }
+        
+        </script>
 </body>
 </html>

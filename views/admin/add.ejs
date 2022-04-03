@@ -27,31 +27,16 @@
                 markdown: document.getElementById('markdown').value,
             }
             let formPost = true;
-            // if(!data.title){
-            //   let span = document.getElementById('span-title');
-            //   span.innerText = 'Boş bırakılamaz';
-            //   span.style.display = 'block'
-            //   formPost = false;
-            // }
-            checkRequiredErrorMessage(data.title, "span-title");
-            if(!data.description){
-              let span = document.getElementById('span-description');
-              span.innerText = 'Boş bırakılamaz';
-              span.style.display = 'block'
-              formPost = false;
-            }
-            if(!data.markdown){
-              let span = document.getElementById('span-markdown');
-              span.innerText = 'Boş bırakılamaz';
-              span.style.display = 'block'
-              formPost = false;
-            }
+            formPost = formPost && checkRequiredErrorMessage(data.title, "span-title");
+            formPost = formPost && checkRequiredErrorMessage(data.description, "span-description");
+            formPost = formPost && checkRequiredErrorMessage(data.markdown, "span-markdown");
             if(formPost){
               post(data);
             }
         })
         const post = (data) =>{
-            fetch('/articles', {
+          document.getElementById('btn-submit').disabled = true;
+            fetch('/yonetim', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -60,11 +45,18 @@
           })
           .then(response => response.json())
           .then(data => {
+            if(data.success){
+              window.location.href = '/yonetim'
+            }else{
+              alert('Kaydederken hata olustu')
+            }
             console.log('Success:', data);
           })
           .catch((error) => {
+            alert('Hata alindi')
             console.error('Error:', error);
-          });
+          })
+          .finally(()=> document.getElementById('btn-submit').disabled = false)
         }
         
         </script>

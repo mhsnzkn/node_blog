@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('../partials/head'); %>
+
+<body>
+  <%- include('../partials/navbar'); %>
+    <div class="container">
+
+        <h1 class="mb-4">Blog Ekle</h1>
+
+        <%- include('_form_fields') %>
+
+    </div>
+
+<%- include('../partials/footer') %>
+
+    <script>
+        document.getElementById('btn-submit').addEventListener('click', function(){
+          let errorTexts = document.querySelectorAll('.error-message');
+          errorTexts.forEach( button =>{
+            button.style.display = 'none'
+          })
+            const data = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                markdown: document.getElementById('markdown').value,
+            }
+            let formPost = true;
+            formPost = formPost && checkRequiredErrorMessage(data.title, "span-title");
+            formPost = formPost && checkRequiredErrorMessage(data.description, "span-description");
+            formPost = formPost && checkRequiredErrorMessage(data.markdown, "span-markdown");
+            if(formPost){
+              post(data);
+            }
+        })
+        const post = (data) =>{
+          document.getElementById('btn-submit').disabled = true;
+            fetch('/yonetim/<%= article.id %>', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          })
+          .then(response => response.json())
+          .then(data => {
+            if(data.success){
+              window.location.href = '/yonetim'
+            }else{
+              alert('Kaydederken hata olustu')
+            }
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+            alert('Hata alindi')
+            console.error('Error:', error);
+          })
+          .finally(()=> document.getElementById('btn-submit').disabled = false)
+        }
+        
+        </script>
+</body>
+</html>

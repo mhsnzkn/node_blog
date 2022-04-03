@@ -3,6 +3,7 @@ function checkRequiredErrorMessage(data, elementId){
         let span = document.getElementById(elementId);
         span.innerText = 'Boş bırakılamaz';
         span.style.display = 'block'
-        formPost = false;
+        return false;
       }
+      return true;
 }

@@ -9,7 +9,7 @@
             <div class="container">
 
                 <h1 class="mb-4">Tüm Yazılarım</h1>
-                <a href="/articles/add" class="btn btn-success">Yeni Ekle</a>
+                <a href="/yonetim/add" class="btn btn-success">Yeni Ekle</a>
 
                 <% articles.forEach( article=> { %>
                     <div class="card mt-4" id="art-<%=article.id%>">
@@ -24,7 +24,9 @@
                             <div class="card-text mb-4">
                                 <%= article.description %>
                             </div>
-                            <a class="btn btn-primary" href="/<%= article.slug %>">Yazıyı oku</a>
+                            <a class="btn btn-primary" href="/yonetim/<%= article.slug %>">Yazıyı oku</a>
+                            <a href="/yonetim/edit/<%= article.id %>" class="btn btn-info">Edit</a>
+                            <button onclick="postAsk('<%= article.id %>')" class="btn btn-danger">Sil</button>
                         </div>
                     </div>
                     <% }) %>
@@ -36,7 +38,7 @@
                 <script>
                     const postAsk = (id) => alertify.confirm('Yazi silinecek onayliyor musunuz?', function(){postDelete(id)});
                     const postDelete = (id) => {
-                        fetch('/articles/' + id, {
+                        fetch('/yonetim/' + id, {
                             method: 'DELETE',
                             headers: {
                                 'Content-Type': 'application/json',

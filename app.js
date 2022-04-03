@@ -11,13 +11,9 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 app.use(express.json())
 
-app.use('/articles', articleRouter)
-app.use('/articles', articleRouter)
+app.use('/yonetim', adminRouter)
+app.use('/', articleRouter)
 
-app.get('/', async (req, res) =>{
-    const articles = await Article.find().sort({createdAt:'desc'});
-    res.render('articles/index', {articles:articles})
-})
 
 dbConnect();
 const PORT = process.env.PORT || 3000
